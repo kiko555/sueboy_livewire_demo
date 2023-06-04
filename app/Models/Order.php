@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
@@ -16,4 +18,9 @@ class Order extends Model
     protected $fillable = [
         'name', 'user_id', 'total_price_origin', 'total_price_after_discount', 'total_quantity',
     ];
+
+    public function order_details(): HasMany
+    {
+        return $this->hasMany(OrderDetail::class, 'order_id', 'order_id');
+    }
 }

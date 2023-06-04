@@ -27,9 +27,7 @@ class OrderDetailList extends Component
         $this->order_id = $order_id;
 
         if( $order_id)
-        {
-            $this->order_details = OrderDetail::Where('order_id', $order_id)->get();
-        }
+            $this->order_details = OrderDetail::with('goods')->where('order_id', $order_id)->get();
     }
 
     public function mount()

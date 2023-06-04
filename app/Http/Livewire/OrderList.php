@@ -11,7 +11,7 @@ class OrderList extends Component
 {
     use WithPagination;
 
-    public $orders;
+    public $orders, $order_infos;
 
     public $action_add = false;
     public $action_edit = false;
@@ -143,5 +143,10 @@ class OrderList extends Component
     public function get_order_detail($order_id)
     {
         $this->emit('triger_refresh_order_details', $order_id);
+    }
+
+    public function all_info($order_id)
+    {
+        $this->order_infos = Order::with('order_details')->where('order_id', $order_id)->get();
     }
 }
