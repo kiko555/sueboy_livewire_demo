@@ -11,7 +11,12 @@ class OrderList extends Component
 {
     use WithPagination;
 
-    public $orders, $order_infos;
+    public $search = '';
+    protected $queryString = ['search' => ['except' => ''], 'page' => ['except' => 1]];
+    protected $paginationTheme = 'bootstrap';
+
+    protected $orders;
+    public $order_infos;
 
     public $action_add = false;
     public $action_edit = false;
@@ -24,19 +29,30 @@ class OrderList extends Component
         'total_quantity' => 'required',
     ];
 
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function refresh_orders()
     {
-        $this->orders = Order::all();
+        $searchText = '%'.$this->search.'%';
+
+        // 搜尋 過瀘
+        $this->orders = Order::Where(function($query) use ($searchText){
+            $query->where('name', 'like', $searchText);
+        })->paginate(5);
     }
 
     public function mount()
     {
-        $this->refresh_orders();
+
     }
 
     public function render()
     {
-        return view('livewire.order-list');
+        $this->refresh_orders();
+        return view('livewire.order-list', ['orders' => $this->orders]);
     }
 
     public function add()
