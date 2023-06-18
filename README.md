@@ -19,3 +19,27 @@ https://sueboy.blogspot.com/2023/06/laravel-livewire-with-winnmp.html
 ```
 docker run --rm -v $(pwd):/app composer install
 ```
+
+## compose config for non bitnami docker????
+
+```
+command: bash -c "php artisan key:generate && php artisan migrate --force --seed && php artisan serve --host=0.0.0.0"
+```
+
+## 如果發 CSS 在 https 下無法正常的問題
+
+因為 CSS 取用的方式有可能在反向代理下會出問題，
+所以可以設計成，判斷環境是否是在 DEV 或 PROD，
+做出不同的判斷。
+
+```
+//redirect http to https
+if (App::environment('production')) {
+    Url::forceScheme('https');
+}
+```
+
+參考資料：
+
+-   https://hoohoo.top/blog/laravel-asset-how-to-support-http/
+-   https://www.jhanley.com/blog/laravel-redirecting-http-to-https/
